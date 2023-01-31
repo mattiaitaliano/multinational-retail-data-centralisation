@@ -1,5 +1,5 @@
 import yaml
-from sqlalchemy import create_engine 
+from sqlalchemy import create_engine, inspect 
 import psycopg2
 
 class DatabaseConnector:
@@ -12,17 +12,16 @@ class DatabaseConnector:
     def init_db_engine(self):
         config = self.read_db_creds()
         engine = create_engine(f"postgresql://{config['RDS_USER']}:{config['RDS_PASSWORD']}@{config['RDS_HOST']}:{config['RDS_PORT']}/{config['RDS_DATABASE']}")
+        engine.connect()
         return engine
 
     def list_db_tables(self):
         engine = self.init_db_engine()
-        with engine.connect() as conn:
-            result = conn.execute('''
-            SELECT table_name 
-            FROM information_schema.tables 
-            WHERE table_schema = 'public';
-            ''')
-            return [row[0] for row in result]
+        
+        engine.connect()
+
+        inspector = inspect(engine)
+        return inspector.get_table_names()
 
     def upload_to_db(self, dataframe, table_name):
         pass
