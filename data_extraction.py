@@ -18,6 +18,4 @@ class DataExtractor:
 
 if __name__ == "__main__":
     extractor = DataExtractor()
-    # my_df_table = extractor.read_rds_table("orders_table")
-    # my_df_table.head()
-    extractor.read_rds_table("order_table")
+    print(extractor.read_rds_table("orders_table"))
