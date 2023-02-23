@@ -23,8 +23,9 @@ class DatabaseConnector:
         inspector = inspect(engine)
         return inspector.get_table_names()
 
-    def upload_to_db(self, dataframe, table_name):
-        pass
+    def upload_to_db(self, df, table_name):
+        local_engine = create_engine('postgresql://admin:adm1n@localhost:5432/Sales_Data')
+        df.to_sql(table_name, local_engine, if_exists='replace')
 
 if __name__ == '__main__':
     db = DatabaseConnector()

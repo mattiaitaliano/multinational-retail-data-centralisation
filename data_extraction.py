@@ -1,5 +1,5 @@
 from database_utils import DatabaseConnector
-import tabula
+import tabula as t
 import pandas as pd
 
 class DataExtractor:
@@ -12,10 +12,9 @@ class DataExtractor:
         return pd.read_sql_table(table_name, self.rds_database)
     
     def retrieve_pdf_data(self, pdf_link):
-        df_pdf = tabula.read_pdf(pdf_link, pages="all")
-        dataframe = pd.DataFrame(df_pdf)
-        return dataframe
+        pdf_dataframes = t.read_pdf(pdf_link, pages="all")
+        return pd.concat(pdf_dataframes,ignore_index=True)
 
 if __name__ == "__main__":
     extractor = DataExtractor()
-    print(extractor.read_rds_table("orders_table"))
+    print(extractor.retrieve_pdf_data("https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf"))
