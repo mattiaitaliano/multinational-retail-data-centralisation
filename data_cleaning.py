@@ -20,10 +20,7 @@ class DataCleaning:
 
 
     def clean_card_data(self, data):
-        new_data = data
-        # remove empty lines
-        new_data = new_data.dropna()
-        # remove NULL's values rows
-        new_data = new_data.dropna(inplace=True)
-
-        return new_data
+        pdf_dataframe = data[data["card_number"] != "NULL"]
+        pdf_dataframe = pdf_dataframe[pdf_dataframe["card_number"] != "card_number"]
+        pdf_dataframe = pdf_dataframe[pd.to_numeric(pdf_dataframe['card_number'], errors='coerce').notnull()]
+        return pdf_dataframe
